@@ -2,30 +2,45 @@ package com.example.easyboxconnector;
 
 //import java.util.Comparator;
 
+import java.io.Serializable;
+
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.util.SparseArray;
 
-public class VulnResults implements Comparable<VulnResults>{
-	private ScanResult res;
+public class VulnResults implements Comparable<VulnResults>,Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4491525094105670148L;
+	//private ScanResult res;
 	private String key;	
+	private String mac;
+	private String ssid;
+	private int level;
+	private int rssi;
+	private int frequency;
+	
 
 	public VulnResults(ScanResult result) throws Exception {
-		this.res = result;
-		this.key = EasyBoxWPAGen.GENERATE_WPA_KEY(result.BSSID);		
+		this.mac = result.BSSID;
+		this.ssid = result.SSID;
+		this.rssi = result.level;
+		this.level = WifiManager.calculateSignalLevel(this.rssi, 5);
+		this.frequency = result.frequency;
+		this.key = EasyBoxWPAGen.GENERATE_WPA_KEY(result.BSSID);	
+		
 	}
 	public String getMac(){
-		return this.res.BSSID;
+		return this.mac;
 	}
 	public String getSSID(){
-		return this.res.SSID;
+		return this.ssid;
 	}
 	public String getKey(){
-		return this.key;
+		return this.key;		
 	}	
-	public int getLevel(){
-		return this.res.level;
-	}
+
 	public String getChannel(){
 		// Frequenz in Channel umrechnen:
 		// SparseArray da er bei Hashmap gemeckert hat:
@@ -43,15 +58,27 @@ public class VulnResults implements Comparable<VulnResults>{
 		hm.put(2462,"11");
 		hm.put(2467,"12");
 		hm.put(2472,"13");
-		return hm.get(this.res.frequency,"Unknown Channel");		
+		return hm.get(this.frequency,"Unknown Channel");		
 	}
 
 
 	public int compareTo(VulnResults another) {
-		return WifiManager.compareSignalLevel(this.getLevel(),another.getLevel());
+		return WifiManager.compareSignalLevel(this.getRSSI(),another.getRSSI());
 	}
 	public String toString(){
-		return this.getSSID() + " Channel: "+this.getChannel();
+		return this.getSSID() + " Ch: "+this.getChannel()+" Key:"+this.getKey();
 	}
+	public int getfrequency() {
+		return this.frequency;
+	}
+	public int getRSSI(){
+		return this.rssi;
+		
+	}
+	public int getLevel() {
+		return this.level;
+		
+	}
+	
 	
 }

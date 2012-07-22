@@ -20,6 +20,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:text="@string/connect" />
+        android:text="@string/scan" />
 
 </RelativeLayout>

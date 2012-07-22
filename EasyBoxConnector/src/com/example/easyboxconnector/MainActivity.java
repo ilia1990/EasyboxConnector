@@ -4,6 +4,7 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.util.Log;
 import android.view.Menu;
@@ -62,25 +63,32 @@ public class MainActivity extends Activity implements OnClickListener,
 	// Handler für Buttons:
 	public void onClick(View view) {
 		if (view.getId() == R.id.ScanButton) {
-			Log.d("Wifi", "Scan started");
-			Toast.makeText(this, "Started Scanning", Toast.LENGTH_LONG).show();
-			wifi.startScan();
+			this.startscan();
 		}
+	}
+	public void startscan(){
+		Log.d("Wifi", "Scan started");
+		Toast.makeText(this, "Started Scanning", Toast.LENGTH_LONG).show();
+		wifi.startScan();
 	}
 	// Handler für die Listview
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		
+		// Object Getten:		
 		ListView lv = (ListView) findViewById(R.id.ConnectionList);
 		VulnResults result = (VulnResults) lv.getAdapter().getItem(position);
-		//Log.d("result", result.getKey());
-		Log.d("Connect","Trying to Connect");
-		boolean connection = WifiConnector.connectToNetwork(wifi, result.getMac(), WifiConnector.WPA, result.getKey(), result.getSSID());
-		if(connection){
-			Toast.makeText(this, "Connection sucessful!", Toast.LENGTH_LONG).show();
-		}else{
-			Toast.makeText(this, "Connection failed!", Toast.LENGTH_LONG).show();
-		}		
+		// Intent erstellen,mit Object füllen:
+		Intent intent = new Intent(MainActivity.this,ConnectActivity.class);
+		Bundle bundle = new Bundle();
+		bundle.putSerializable("result", result);
+		intent.putExtras(bundle);
+		// Activity starten:
+		this.startActivity(intent);
+
+		
+
+				
+				
 		
 	
 

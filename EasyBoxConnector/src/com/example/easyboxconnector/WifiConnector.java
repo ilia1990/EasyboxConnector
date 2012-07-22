@@ -10,12 +10,13 @@ public class WifiConnector {
 
 	// Verbindung mit gewählten AP aufbauen
 	public static boolean connectToNetwork(WifiManager wifi, String mac,
-			int iSecurityType, String key, String ssid) {
+			 String key, String ssid) {
 
 		Log.d("Connect", "Trying to Connect");
 		Log.d("Connect", ssid);
 		Log.d("Connect", mac);
 		Log.d("Connect", key);
+		//int iSecurityType;
 		WifiConfiguration tmpConfig;
 		/*
 		 * List <WifiConfiguration> listConfig = wifi.getConfiguredNetworks();
